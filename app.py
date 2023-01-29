@@ -9,7 +9,7 @@ def vacancy():
     return "All vacancy"
 
 
-@app.route("/vacancy/<id>", methods=['GET', 'PUT'])
+@app.route("/vacancy/<id>/", methods=['GET', 'PUT'])
 def vacancy_id():
     return "Vacancy id"
 
@@ -19,9 +19,9 @@ def vacancy_events():
     return "Vacancy events"
 
 
-@app.route("/vacancy/<id>/events/<events_id>", methods=['GET', 'PUT'])
+@app.route("/vacancy/<id>/events/<events_id>/", methods=['GET', 'PUT'])
 def vacancy_events_id():
-    return "Vacancy events ig"
+    return "Vacancy events id"
 
 
 @app.route("/vacancy/<id>/history/", methods=['GET'])
@@ -49,7 +49,7 @@ def user_settings():
     return "User Settings"
 
 
-@app.route("/user/documents", methods=['GET', 'POST', 'PUT', 'DELETE'])
+@app.route("/user/documents/", methods=['GET', 'POST', 'PUT', 'DELETE'])
 def user_documents():
     return "User Documents"
 
@@ -61,4 +61,3 @@ def user_templates():
 
 if __name__ == '__main__':
     app.run()
-
