@@ -1,10 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Event</title>
 </head>
-<body>
-$END$
+<body style="background-color:Beige;">
+
+<form action="/vacancy/{{id_vacancy}}/events/" method="GET" >
+<fieldset>
+     <legend><h3>All eventy:</h3></legend>
+            <div>
+                {{event}}
+            </div>
+</fieldset>
+</form>
+
+<br><br>
+
+<form action="/vacancy/{{id_vacancy}}/events/" method="POST" >
+<fieldset>
+     <legend><h3>Form for add event:</h3></legend>
+    <label for="description">Description:</label><br>
+    <input type="text" id="description" name="description" placeholder="Description"><br><br>
+
+    <label for="event_date">Event date:</label><br>
+    <input type="text" id="event_date" name="event_date" placeholder="Event date"><br><br>
+
+    <label for="title">Title:</label><br>
+    <input type="text" id="title" name="title" placeholder="Title"><br><br>
+
+    <label for="deadline_date">Deadline date:</label><br>
+    <input type="text" id="deadline_date" name="deadline_date" placeholder="Deadline date"><br><br>
+
+    <input type="submit" value="Add event">
+</fieldset>
+</form>
+
 </body>
 </html>
+
