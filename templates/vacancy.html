@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <title>New vacancy</title>
 </head>
-<body style="background-color:Beige; text-align:center;">
+<body style="background-color:Beige;">
 
 <form action="/vacancy/" method="POST" >
-    <h2 style="text-align:center;">Form for adding a vacancy</h2>
-
+<fieldset>
+     <legend><h3>Form for adding a vacancy:</h3></legend>
     <label for="company">Company name:</label><br>
     <input type="text" id="company" name="company" placeholder="Company"><br><br>
 
@@ -25,7 +25,20 @@
     <input type="text" id="comment" name="comment" placeholder="Comment"><br><br>
 
     <input type="submit" value="Add vacancy">
+</fieldset>
 </form>
+
+<form action="/vacancy/" method="GET" >
+<fieldset>
+     <legend><h3>All vacancy:</h3></legend>
+            <div>
+                {{vacancies}}
+            </div>
+
+</fieldset>
+</form>
+
+
 
 </body>
 </html>
