@@ -5,134 +5,99 @@ import db_processes
 
 app = Flask(__name__)
 
-vacancies_date = [
-    {
-        'id': 1,
-        'creation_date': "02.02.2023",
-        'status': 1,
-        'company': "Company name 1",
-        'contacts_ids': [1, 2],
-        'description': "Description vacancy 1",
-        'position_name': "Python developer",
-        'comment': "My comment for vacancy 1",
-        'user_id': 1
-    },
-    {
-        'id': 2,
-        'creation_date': "01.02.2023",
-        'status': 1,
-        'company': "Company name 2",
-        'contacts_ids': [3],
-        'description': "Description vacancy 2",
-        'position_name': "Backend developer",
-        'comment': "My comment for vacancy 2",
-        'user_id': 1
-    },
-    {
-        'id': 3,
-        'creation_date': "25.01.2023",
-        'status': 1,
-        'company': "Company name 3",
-        'contacts_ids': [4, 5],
-        'description': "Description vacancy 3",
-        'position_name': "ISO developer",
-        'comment': "My comment for vacancy 2",
-        'user_id': 1
-    }
-]
 
-events_date = [
-    {
-        'id': 1,
-        'vacancy_id': 1,
-        'description': "Description event 1",
-        'event_date': "04.02.2023",
-        'title': "Event title for vacancy 1",
-        'due_to_date': "08.02.2023",
-        'status': 1
-    },
-    {
-        'id': 2,
-        'vacancy_id': 2,
-        'description': "Description event 2",
-        'event_date': "06.02.2023",
-        'title': "Event title for vacancy 2",
-        'due_to_date': "15.02.2023",
-        'status': 1
-    },
-    {
-        'id': 3,
-        'vacancy_id': 2,
-        'description': "Description event 3",
-        'event_date': "07.02.2023",
-        'title': "Event title for vacancy 2",
-        'due_to_date': "15.02.2023",
-        'status': 1
-    }
-]
-
-
-@app.route("/vacancy/", methods=['GET', 'POST', 'PUT'])
+@app.route("/vacancy/", methods=['GET', 'POST'])
 def vacancies():
-    if request.method == 'POST':
-        company = request.form.get('company')
-        position_name = request.form.get('position_name')
-        description = request.form.get('description')
-        contacts_ids = request.form.get('contacts_ids')
-        comment = request.form.get('comment')
-        vacancy_data = {
-            'user_id': 1,
-            'creation_date': "06.02.2023",
-            'company': company,
-            'position_name': position_name,
-            'description': description,
-            'contacts_ids': contacts_ids,
-            'comment': comment
-            }
-        db_processes.insert_info("vacancy", vacancy_data)
-        all_vacancies = db_processes.select_info("SELECT * FROM vacancy")
-        return render_template('vacancy.html', vacancies=all_vacancies)
-    elif request.method == 'PUT':
-        pass
-    else:  # 'GET'
-        all_vacancies = db_processes.select_info("SELECT * FROM vacancy")
-        return render_template('vacancy.html', vacancies=all_vacancies)
+    with db_processes.Database() as db:
+        if request.method == 'POST':
+            company = request.form.get('company')
+            position_name = request.form.get('position_name')
+            description = request.form.get('description')
+            contacts_ids = request.form.get('contacts_ids')
+            comment = request.form.get('comment')
+            vacancy_data = {
+                'user_id': 1,
+                'creation_date': "06.02.2023",
+                'company': company,
+                'position_name': position_name,
+                'description': description,
+                'contacts_ids': contacts_ids,
+                'comment': comment
+                }
+            db.insert("vacancy", vacancy_data)
+            result = db.query("SELECT * FROM vacancy")
+        elif request.method == 'GET':
+            result = db.query("SELECT * FROM vacancy")
+        return render_template('vacancy.html', vacancies=result)
 
 
-@app.route("/vacancy/<int:id_vacancy>/", methods=['GET', 'PUT'])
+@app.route("/vacancy/<int:id_vacancy>/", methods=['GET', 'POST'])
 def vacancy_id(id_vacancy):
-    if request.method == 'GET':
-        one_vacancy = db_processes.select_info(f"SELECT * FROM vacancy where id = {id_vacancy}")
-        return render_template('vacancy-one.html', one_vacancy=one_vacancy, id_vacancy=id_vacancy)
+    with db_processes.Database() as db:
+        if request.method == 'POST':  # 'PUT'
+            company = request.form.get('company')
+            position_name = request.form.get('position_name')
+            description = request.form.get('description')
+            contacts_ids = request.form.get('contacts_ids')
+            comment = request.form.get('comment')
+            vacancy_data = {
+                'user_id': 1,
+                'creation_date': "06.02.2023",
+                'company': company,
+                'position_name': position_name,
+                'description': description,
+                'contacts_ids': contacts_ids,
+                'comment': comment
+                }
+            db.update("vacancy", vacancy_data, f"id = {id_vacancy}")
+            result = db.query(f"SELECT * FROM vacancy WHERE id = {id_vacancy}")
+        elif request.method == 'GET':
+            result = db.query(f"SELECT * FROM vacancy WHERE id = {id_vacancy}")
+        return render_template('vacancy-one.html', vacancy=result, id_vacancy=id_vacancy)
 
 
 @app.route("/vacancy/<int:id_vacancy>/events/", methods=['GET', 'POST'])
 def vacancy_events(id_vacancy):
-    if request.method == 'POST':
-        description = request.form.get('description')
-        event_date = request.form.get('event_date')
-        title = request.form.get('title')
-        deadline_date = request.form.get('deadline_date')
-        event_data = {
-            'vacancy_id': id_vacancy,
-            'description': description,
-            'event_date': event_date,
-            'title': title,
-            'deadline_date': deadline_date,
-            }
-        db_processes.insert_info("events", event_data)
-        all_event = db_processes.select_info(f"SELECT * FROM events where vacancy_id = {id_vacancy}")
-        return render_template('event.html', event=all_event, id_vacancy=id_vacancy)
-    else:  # 'GET'
-        all_event = db_processes.select_info(f"SELECT * FROM events where vacancy_id = {id_vacancy}")
-        return render_template('event.html', event=all_event, id_vacancy=id_vacancy)
+    with db_processes.Database() as db:
+        if request.method == 'POST':
+            description = request.form.get('description')
+            event_date = request.form.get('event_date')
+            title = request.form.get('title')
+            deadline_date = request.form.get('deadline_date')
+            event_data = {
+                'vacancy_id': id_vacancy,
+                'description': description,
+                'event_date': event_date,
+                'title': title,
+                'deadline_date': deadline_date,
+                }
+            db.insert("events", event_data)
+            result = db.query(f"SELECT * FROM events WHERE vacancy_id = {id_vacancy}")
+        elif request.method == 'GET':
+            result = db.query(f"SELECT * FROM events WHERE vacancy_id = {id_vacancy}")
+        return render_template('event.html', event=result, id_vacancy=id_vacancy)
 
 
-@app.route("/vacancy/<int:id_vacancy>/events/<int:id_events>/", methods=['GET', 'PUT'])
+@app.route("/vacancy/<int:id_vacancy>/events/<int:id_events>/", methods=['GET', 'POST'])
 def vacancy_events_id(id_vacancy, id_events):
-    if request.method == 'GET':
-        one_event = db_processes.select_info(f"SELECT * FROM events where vacancy_id = {id_vacancy} AND id = {id_events}")
-        return render_template('event-one.html', one_event=one_event, id_vacancy=id_vacancy, id_events=id_events)
+    with db_processes.Database() as db:
+        if request.method == 'POST':  # 'PUT'
+            description = request.form.get('description')
+            event_date = request.form.get('event_date')
+            title = request.form.get('title')
+            deadline_date = request.form.get('deadline_date')
+            event_data = {
+                'vacancy_id': id_vacancy,
+                'description': description,
+                'event_date': event_date,
+                'title': title,
+                'deadline_date': deadline_date,
+            }
+            db.update("events", event_data, f"id = {id_events}")
+            result = db.query(f"SELECT * FROM events WHERE vacancy_id = {id_vacancy} AND id = {id_events}")
+        elif request.method == 'GET':
+            result = db.query(f"SELECT * FROM events WHERE vacancy_id = {id_vacancy} AND id = {id_events}")
+        return render_template('event-one.html', event=result, id_vacancy=id_vacancy, id_events=id_events)
 
 
 @app.route("/vacancy/<id>/history/", methods=['GET'])
