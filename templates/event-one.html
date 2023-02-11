@@ -10,13 +10,31 @@
 <fieldset>
     <legend><h3>One event:</h3></legend>
             <div>
-                {{one_event}}
+                {{event}}
             </div>
 </fieldset>
 </form>
 
+<br><br>
 
+<form action="/vacancy/{{id_vacancy}}/events/{{id_events}}/" method="POST" >
+<fieldset>
+     <legend><h3>Form for update event:</h3></legend>
+    <label for="description">Description:</label><br>
+    <input type="text" id="description" name="description" placeholder="Description" value="{{event[0][2]}}"><br><br>
 
+    <label for="event_date">Event date:</label><br>
+    <input type="date" id="event_date" name="event_date" placeholder="Event date" value="{{event[0][3]}}"><br><br>
+
+    <label for="title">Title:</label><br>
+    <input type="text" id="title" name="title" placeholder="Title" value="{{event[0][4]}}"><br><br>
+
+    <label for="deadline_date">Deadline date:</label><br>
+    <input type="date" id="deadline_date" name="deadline_date" placeholder="Deadline date" value="{{event[0][5]}}"><br><br>
+
+    <input type="submit" value="Update event">
+</fieldset>
+</form>
 
 </body>
 </html>

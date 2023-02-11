@@ -6,17 +6,38 @@
 </head>
 <body style="background-color:Beige;">
 
-<form action="/vacancy/{{id_vacancy}}/" method="GET" >
+<form action="/vacancy/{{id_vacancy}}/" method="GET">
 <fieldset>
-    <legend><h3>One vacancy:</h3></legend>
+    <legend><h3>Vacancy:</h3></legend>
             <div>
-                {{one_vacancy}}
+                {{vacancy}}
             </div>
 </fieldset>
 </form>
 
+<br><br>
 
+<form action="/vacancy/{{id_vacancy}}/" method="POST">
+<fieldset>
+     <legend><h3>Form for update vacancy:</h3></legend>
+    <label for="company">Company name:</label><br>
+    <input type="text" id="company" name="company" placeholder="Company" value="{{vacancy[0][3]}}"><br><br>
 
+    <label for="position_name">Position name:</label><br>
+    <input type="text" id="position_name" name="position_name" placeholder="Position" value="{{vacancy[0][6]}}"><br><br>
+
+    <label for="description">Description:</label><br>
+    <input type="text" id="description" name="description" placeholder="Description" value="{{vacancy[0][5]}}"><br><br>
+
+    <label for="contacts_ids">Contacts:</label><br>
+    <input type="text" id="contacts_ids" name="contacts_ids" placeholder="Contacts" value="{{vacancy[0][4]}}"><br><br>
+
+    <label for="comment">Comment:</label><br>
+    <input type="text" id="comment" name="comment" placeholder="Comment" value="{{vacancy[0][7]}}"><br><br>
+
+    <input type="submit" value="Update vacancy">
+</fieldset>
+</form>
 
 </body>
 </html>

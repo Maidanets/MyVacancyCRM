@@ -8,7 +8,7 @@
 
 <form action="/vacancy/{{id_vacancy}}/events/" method="GET" >
 <fieldset>
-     <legend><h3>All eventy:</h3></legend>
+     <legend><h3>Eventy:</h3></legend>
             <div>
                 {{event}}
             </div>
@@ -24,13 +24,13 @@
     <input type="text" id="description" name="description" placeholder="Description"><br><br>
 
     <label for="event_date">Event date:</label><br>
-    <input type="text" id="event_date" name="event_date" placeholder="Event date"><br><br>
+    <input type="date" id="event_date" name="event_date" placeholder="Event date"><br><br>
 
     <label for="title">Title:</label><br>
     <input type="text" id="title" name="title" placeholder="Title"><br><br>
 
     <label for="deadline_date">Deadline date:</label><br>
-    <input type="text" id="deadline_date" name="deadline_date" placeholder="Deadline date"><br><br>
+    <input type="date" id="deadline_date" name="deadline_date" placeholder="Deadline date"><br><br>
 
     <input type="submit" value="Add event">
 </fieldset>
