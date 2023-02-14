@@ -2,7 +2,6 @@ from flask import Flask
 from flask import request, render_template
 from models import Vacancy, Event
 import db_alchemy
-import db_processes
 
 app = Flask(__name__)
 
