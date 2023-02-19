@@ -1,13 +1,38 @@
 from flask import Flask
 from flask import request, render_template
 from models import Vacancy, Event
+from datetime import datetime
 import db_alchemy
+
 
 app = Flask(__name__)
 
 
+@app.route("/", methods=['GET', 'POST'])
+def welcome_vacancies():
+    if request.method == 'POST':
+        db_alchemy.init_db()
+        result = db_alchemy.db_session.query(Vacancy).all()
+        return render_template('vacancies.html', vacancies=result)
+    return render_template('welcome-vacancy.html')
+
+
 @app.route("/vacancy/", methods=['GET', 'POST'])
 def vacancies():
+    db_alchemy.init_db()
+    result = db_alchemy.db_session.query(Vacancy).all()
+    return render_template('vacancies.html', vacancies=result)
+
+
+@app.route("/vacancy/<int:id_vacancy>/", methods=['GET', 'POST'])
+def vacancy_id(id_vacancy):
+    db_alchemy.init_db()
+    result = db_alchemy.db_session.query(Vacancy).filter_by(id=id_vacancy).all()
+    return render_template('vacancy-one.html', vacancy=result, id_vacancy=id_vacancy)
+
+
+@app.route("/vacancy-add/", methods=['GET', 'POST'])
+def vacancies_add():
     db_alchemy.init_db()
     if request.method == 'POST':
         company = request.form.get('company')
@@ -18,51 +43,47 @@ def vacancies():
         current_vacancies = Vacancy(company, position_name, description, contacts_ids, comment, status=1, user_id=1)
         db_alchemy.db_session.add(current_vacancies)
         db_alchemy.db_session.commit()
-    result = db_alchemy.db_session.query(Vacancy).all()
-    return render_template('vacancy.html', vacancies=result)
-
-
-@app.route("/vacancy/<int:id_vacancy>/", methods=['GET', 'POST'])
-def vacancy_id(id_vacancy):
-    db_alchemy.init_db()
-#    if request.method == 'POST':  # 'PUT'
-#        company = request.form.get('company')
-#        position_name = request.form.get('position_name')
-#        description = request.form.get('description')
-#        contacts_ids = request.form.get('contacts_ids')
-#        comment = request.form.get('comment')
-#        current_vac = Vacancy(company, position_name, description, contacts_ids, comment, status=1, user_id=1)
-    result = db_alchemy.db_session.query(Vacancy).filter_by(id=id_vacancy).all()
-    return render_template('vacancy-one.html', vacancy=result, id_vacancy=id_vacancy)
+        result = db_alchemy.db_session.query(Vacancy).all()
+        return render_template('vacancies.html', vacancies=result)
+    return render_template('vacancy-add.html')
 
 
 @app.route("/vacancy/<int:id_vacancy>/events/", methods=['GET', 'POST'])
 def vacancy_events(id_vacancy):
     db_alchemy.init_db()
-    if request.method == 'POST':
-        vacancy_id = id_vacancy
-        description = request.form.get('description')
-        event_date = request.form.get('event_date')
-        title = request.form.get('title')
-        deadline_date = request.form.get('deadline_date')
-        current_events = Event(vacancy_id, description, event_date, title, deadline_date, status=1)
-        db_alchemy.db_session.add(current_events)
-        db_alchemy.db_session.commit()
     result = db_alchemy.db_session.query(Event).filter_by(vacancy_id=id_vacancy).all()
-    return render_template('event.html', event=result, id_vacancy=id_vacancy)
+    return render_template('events.html', events=result, id_vacancy=id_vacancy)
 
 
 @app.route("/vacancy/<int:id_vacancy>/events/<int:id_events>/", methods=['GET', 'POST'])
 def vacancy_events_id(id_vacancy, id_events):
     db_alchemy.init_db()
-#    if request.method == 'POST':  # 'PUT'
-#        description = request.form.get('description')
-#        event_date = request.form.get('event_date')
-#        title = request.form.get('title')
-#        deadline_date = request.form.get('deadline_date')
-#        current_events = Event(vacancy_id, description, event_date, title, deadline_date, status=1)
     result = db_alchemy.db_session.query(Event).filter_by(vacancy_id=id_vacancy, id=id_events).all()
-    return render_template('event-one.html', event=result, id_vacancy=id_vacancy, id_events=id_events)
+    return render_template('event-one.html', events=result, id_vacancy=id_vacancy, id_events=id_events)
+
+
+@app.route("/vacancy/<int:id_vacancy>/events-add/", methods=['GET', 'POST'])
+def vacancy_events_add(id_vacancy):
+    db_alchemy.init_db()
+    if request.method == 'POST':
+        vacancy_id = id_vacancy
+        description = request.form.get('description')
+        title = request.form.get('title')
+
+        input_event_date_str = request.form.get('event_date')
+        input_event_date = datetime.strptime(input_event_date_str, '%Y-%m-%dT%H:%M')
+        event_date = input_event_date.strftime('%Y-%m-%d %H:%M:%S.%f')
+
+        input_deadline_date_str = request.form.get('deadline_date')
+        input_deadline_date = datetime.strptime(input_deadline_date_str, '%Y-%m-%dT%H:%M')
+        deadline_date = input_deadline_date.strftime('%Y-%m-%d %H:%M:%S.%f')
+
+        current_events = Event(vacancy_id, description, event_date, title, deadline_date, status=1)
+        db_alchemy.db_session.add(current_events)
+        db_alchemy.db_session.commit()
+        result = db_alchemy.db_session.query(Event).filter_by(vacancy_id=id_vacancy).all()
+        return render_template('events.html', events=result, id_vacancy=id_vacancy)
+    return render_template('event-add.html', id_vacancy=id_vacancy)
 
 
 @app.route("/vacancy/<id>/history/", methods=['GET'])
