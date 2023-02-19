@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Add Vacancy</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        font-size: 28px;
+        margin-top: 50px;
+        margin-bottom: 30px;
+        text-align: center;
+      }
+
+      form {
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        margin: 0 auto;
+        max-width: 600px;
+        padding: 30px;
+      }
+
+      label {
+        display: block;
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+
+      input[type="text"],
+      select,
+      textarea {
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        box-sizing: border-box;
+        font-size: 16px;
+        margin-bottom: 20px;
+        padding: 10px;
+        width: 100%;
+      }
+      input[type="submit"] {
+        background-color: #4CAF50;
+        border: none;
+        border-radius: 3px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 10px 20px;
+      }
+      input[type="submit"]:hover {
+        background-color: #3e8e41;
+      }
+      input[type="datetime-local"] {
+        display: block;
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Form for adding a event</h1>
+    <form action="/vacancy/{{ id_vacancy }}/events-add/"  method="POST">
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="title" placeholder="Enter title">
+      <label for="description">Description:</label>
+      <textarea id="description" name="description" rows="5" placeholder="Enter description"></textarea>
+        <div style="display: inline-block; margin-right: 30px;">
+          <label for="event_date">Event date:</label>
+          <input type="datetime-local" id="event_date" name="event_date" style="padding: 10px; border-radius: 5px; border: 2px solid #ccc;">
+        </div>
+        <div style="display: inline-block;">
+          <label for="deadline_date">Deadline date:</label>
+          <input type="datetime-local" id="deadline_date" name="deadline_date" style="padding: 10px; border-radius: 5px; border: 2px solid #ccc;">
+        </div>
+      <br><br>
+      <input type="submit" value="Add Event">
+    </form>
+  </body>
+</html>

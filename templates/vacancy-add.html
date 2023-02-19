@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Add Vacancy</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        font-size: 28px;
+        margin-top: 50px;
+        margin-bottom: 30px;
+        text-align: center;
+      }
+
+      form {
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        margin: 0 auto;
+        max-width: 600px;
+        padding: 30px;
+      }
+
+      label {
+        display: block;
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+
+      input[type="text"],
+      input[type="email"],
+      select,
+      textarea {
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        box-sizing: border-box;
+        font-size: 16px;
+        margin-bottom: 20px;
+        padding: 10px;
+        width: 100%;
+      }
+
+      input[type="submit"] {
+        background-color: #4CAF50;
+        border: none;
+        border-radius: 3px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 10px 20px;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #3e8e41;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Form for adding a vacancy</h1>
+    <form action="/vacancy-add/"  method="POST">
+      <label for="company">Company:</label>
+      <input type="text" id="company" name="company" placeholder="Enter name company">
+
+      <label for="position_name">Position name:</label>
+      <input type="text" id="position_name" name="position_name" placeholder="Enter position name">
+
+      <label for="description">Description:</label>
+      <textarea id="description" name="description" rows="5" placeholder="Enter description"></textarea>
+
+      <label for="contacts_ids">Contacts:</label>
+      <input type="text" id="contacts_ids" name="contacts_ids" placeholder="Enter contacts">
+
+      <label for="comment">Comment:</label>
+      <textarea id="comment" name="comment" rows="5" placeholder="Enter comment"></textarea>
+
+      <input type="submit" value="Add Vacancy">
+    </form>
+  </body>
+</html>

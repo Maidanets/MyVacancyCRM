@@ -19,11 +19,6 @@
         margin-top: 20px;
         border-radius: 5px;
       }
-      .fixed-div {
-        position: fixed;
-        top: 0;
-        right: 0;
-      }
       h1 {
         font-size: 32px;
         margin-bottom: 20px;
@@ -51,6 +46,16 @@
       li span {
         font-weight: bold;
       }
+      .link {
+        color: #007bff;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .link:hover {
+        color: #0056b3;
+        text-decoration: underline;
+      }
       input[type="submit"] {
         background-color: #4CAF50;
         border: none;
@@ -74,6 +79,7 @@
         box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
         transition: all 0.3s ease;
       }
+
       .button:hover {
         background-color: #0056b3;
         box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.5);
@@ -85,28 +91,23 @@
     </style>
   </head>
   <body>
-    <form action="/vacancy/{{ vacancy.id }}/" method="GET">
+    <form action="/vacancy/"  method="GET">
       <div class="container">
         <table>
           <tr>
-            <td><h1>Vacancy</h1></td>
-            <td style="text-align: right;"><a href="/vacancy/" class="button">All vacancies</a></td>
+            <td><h1>Vacancies List</h1></td>
+            <td style="text-align: right;"><a href="/vacancy-add/" class="button">Add vacancy</a></td>
           </tr>
         </table>
       </div>
       <div class="container">
         <ul>
-          {% for vacancy in vacancy %}
+          {% for vacancy in vacancies[::-1] %}
           <li>
-            <h2>{{ vacancy.position_name }}</h2>
+            <a href="/vacancy/{{ vacancy.id }}/" class="link"><h2>{{ vacancy.position_name }}</h2></a>
             <p><span>Company:</span> {{ vacancy.company }}</p>
             <p><span>Description:</span> {{ vacancy.description }}</p>
-            <p><span>Contacts:</span> {{ vacancy.contacts_ids }}</p>
-            <p><span>Comment:</span> {{ vacancy.comment }}</p>
-            <p><span>Creation Date:</span> {{ vacancy.creation_date }}</p>
-            <p><span>Status:</span> {{ vacancy.status }}</p>
           </li>
-          <a href="/vacancy/{{ vacancy.id }}/events/" class="button">Open events</a>
           {% endfor %}
         </ul>
       </div>

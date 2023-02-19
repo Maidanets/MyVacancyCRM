@@ -3,38 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <title>Event</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 5px #ccc;
+        margin-top: 20px;
+        border-radius: 5px;
+      }
+      h1 {
+        font-size: 32px;
+        margin-bottom: 20px;
+      }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      li {
+        margin-bottom: 20px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        box-shadow: 0 0 5px #ccc;
+      }
+      li h2 {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+      li p {
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+      li span {
+        font-weight: bold;
+      }
+
+      input[type="submit"] {
+        background-color: #4CAF50;
+        border: none;
+        border-radius: 3px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 10px 20px;
+      }
+      input[type="submit"]:hover {
+        background-color: #3e8e41;
+      }
+      .button {
+        display: inline-block;
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        font-size: 18px;
+        text-decoration: none;
+        border-radius: 10px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+      }
+      .button:hover {
+        background-color: #0056b3;
+        box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.5);
+      }
+	  table {
+        width: 100%;
+      }
+
+    </style>
 </head>
-<body style="background-color:Beige;">
-
-<form action="/vacancy/{{id_vacancy}}/events/{{id_events}}/" method="GET" >
-<fieldset>
-    <legend><h3>One event:</h3></legend>
-            <div>
-                {{event}}
-            </div>
-</fieldset>
-</form>
-
-<br><br>
-
-<form action="/vacancy/{{id_vacancy}}/events/{{id_events}}/" method="POST" >
-<fieldset>
-     <legend><h3>Form for update event:</h3></legend>
-    <label for="description">Description:</label><br>
-    <input type="text" id="description" name="description" placeholder="Description" value="{{event[0][2]}}"><br><br>
-
-    <label for="event_date">Event date:</label><br>
-    <input type="date" id="event_date" name="event_date" placeholder="Event date" value="{{event[0][3]}}"><br><br>
-
-    <label for="title">Title:</label><br>
-    <input type="text" id="title" name="title" placeholder="Title" value="{{event[0][4]}}"><br><br>
-
-    <label for="deadline_date">Deadline date:</label><br>
-    <input type="date" id="deadline_date" name="deadline_date" placeholder="Deadline date" value="{{event[0][5]}}"><br><br>
-
-    <input type="submit" value="Update event">
-</fieldset>
+<body>
+    <form action="/vacancy/{{ id_vacancy }}/events/{{ id_events }}/"  method="GET">
+      <div class="container">
+        <table>
+          <tr>
+            <td><h1>Event</h1></td>
+            <td style="text-align: right;">
+                <a href="/vacancy/{{ id_vacancy }}/events/" class="button">Events</a>
+                <a href="/vacancy/{{id_vacancy}}/" class="button">Vacancy</a>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="container">
+        <ul>
+          {% for event in events[::-1] %}
+          <li>
+            <h2>{{ event.title }}</h2>
+            <p><span>Description:</span> {{ event.description }}</p>
+            <p><span>Event date:</span> {{ event.event_date[:16] }}</p>
+            <p><span>Deadline date:</span> {{ event.deadline_date[:16] }}</p>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
 </form>
 
 </body>
 </html>
+
