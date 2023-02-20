@@ -103,7 +103,7 @@
             <p><span>Description:</span> {{ vacancy.description }}</p>
             <p><span>Contacts:</span> {{ vacancy.contacts_ids }}</p>
             <p><span>Comment:</span> {{ vacancy.comment }}</p>
-            <p><span>Creation Date:</span> {{ vacancy.creation_date }}</p>
+            <p><span>Creation Date:</span> {{ vacancy.creation_date[:10] }}</p>
             <p><span>Status:</span> {{ vacancy.status }}</p>
           </li>
           <a href="/vacancy/{{ vacancy.id }}/events/" class="button">Open events</a>
