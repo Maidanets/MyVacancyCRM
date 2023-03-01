@@ -1,9 +1,9 @@
 from flask import Flask
 from flask import request, render_template
-from models import Vacancy, Event
+from models import Vacancy, Event, EmailCredentials
 from datetime import datetime
 import db_alchemy
-
+import email_lib
 
 app = Flask(__name__)
 
@@ -101,9 +101,28 @@ def user_calendar():
     return "User Calendar"
 
 
-@app.route("/user/mail/", methods=['GET'])
+@app.route("/user/mail/", methods=['GET', 'POST'])
 def user_mail():
-    return "User Mail"
+    user_email_settings = db_alchemy.db_session.query(EmailCredentials).filter_by(user_id=1).first()
+    email_obj = email_lib.EmailWrapper(
+        user_email_settings.email,
+        user_email_settings.login,
+        user_email_settings.password,
+        user_email_settings.smtp_server,
+        user_email_settings.smtp_port,
+        user_email_settings.pop_server,
+        user_email_settings.pop_port,
+        user_email_settings.imap_server,
+        user_email_settings.imap_port
+    )
+    if request.method == 'POST':
+
+        recipient = request.form.get('recipient')
+        email_message = request.form.get('email_message')
+        email_obj.send_email(recipient, email_message)
+        return "SEND MAIL"
+    emails = email_obj.get_emails([1, 2, 3], protocol='pop3')
+    return render_template('send_email.html', emails=emails)
 
 
 @app.route("/user/settings/", methods=['GET', 'PUT'])
