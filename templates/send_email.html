@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
-$END$
+    <h1>Форма з електронною поштою</h1>
+    <form action="/user/mail/" method="POST">
+
+        <input type="text" id="recipient" name="recipient" placeholder="recipient">
+        <input type="text" id="email_message" name="email_message" placeholder="email_message">
+        <input type="submit" value="Send">
+    </form>
+{% for one_email in emails  %}
+{{one_email}}
+{% endfor %}
 </body>
 </html>
