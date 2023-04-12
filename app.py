@@ -2,8 +2,11 @@ from flask import Flask
 from flask import request, render_template
 from models import Vacancy, Event, EmailCredentials
 from datetime import datetime
+from bson.objectid import ObjectId
 import db_alchemy
 import email_lib
+import db_mongo
+
 
 app = Flask(__name__)
 
@@ -27,23 +30,40 @@ def vacancies():
 @app.route("/vacancy/<int:id_vacancy>/", methods=['GET', 'POST'])
 def vacancy_id(id_vacancy):
     db_alchemy.init_db()
+    db_mongo.init_db_mongo()
     result = db_alchemy.db_session.query(Vacancy).filter_by(id=id_vacancy).all()
-    return render_template('vacancy-one.html', vacancy=result, id_vacancy=id_vacancy)
+    for item in result:
+        contacts = item.contacts_ids.split(',')
+        contacts_result = []
+        for contact in contacts:
+            date = db_mongo.init_db_mongo().find_one({'_id': ObjectId(contact)})
+            contacts_result.append(date)
+        return render_template('vacancy-one.html', vacancy=result, id_vacancy=id_vacancy, contacts_result=contacts_result)
 
 
 @app.route("/vacancy-add/", methods=['GET', 'POST'])
 def vacancies_add():
     db_alchemy.init_db()
+    db_mongo.init_db_mongo()
+
     if request.method == 'POST':
         company = request.form.get('company')
         position_name = request.form.get('position_name')
         description = request.form.get('description')
-        contacts_ids = request.form.get('contacts_ids')
+        contacts_name = request.form.get('contacts_name')
+        contacts_mobile = request.form.get('contacts_mobile')
+        contacts_email = request.form.get('contacts_email')
         comment = request.form.get('comment')
-        current_vacancies = Vacancy(company, position_name, description, contacts_ids, comment, status=1, user_id=1)
+
+        contacts_id_inserted = db_mongo.init_db_mongo().insert_one(
+            {"name": contacts_name, "mobile": contacts_mobile, "email": contacts_email}
+        ).inserted_id
+
+        current_vacancies = Vacancy(company, position_name, description, str(contacts_id_inserted), comment, status=1, user_id=1)
         db_alchemy.db_session.add(current_vacancies)
         db_alchemy.db_session.commit()
         result = db_alchemy.db_session.query(Vacancy).all()
+
         return render_template('vacancies.html', vacancies=result)
     return render_template('vacancy-add.html')
 
