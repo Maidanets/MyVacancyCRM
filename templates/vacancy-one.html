@@ -101,7 +101,13 @@
             <h2>{{ vacancy.position_name }}</h2>
             <p><span>Company:</span> {{ vacancy.company }}</p>
             <p><span>Description:</span> {{ vacancy.description }}</p>
-            <p><span>Contacts:</span> {{ vacancy.contacts_ids }}</p>
+            <dl>
+              <dt><p><span>Contacts:</span> {% for contacts_result in contacts_result %}<br></dt>
+              <dd><span>Name:</span> {{ contacts_result.name }}</dd>
+              <dd><span>Mobile:</span> {{ contacts_result.mobile }}</dd>
+              <dd><span>Email:</span> {{ contacts_result.email }}</dd>
+            {% endfor %}
+            </dl>
             <p><span>Comment:</span> {{ vacancy.comment }}</p>
             <p><span>Creation Date:</span> {{ vacancy.creation_date[:10] }}</p>
             <p><span>Status:</span> {{ vacancy.status }}</p>
