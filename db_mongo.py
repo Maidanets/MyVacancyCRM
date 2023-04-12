@@ -6,3 +6,4 @@ def init_db_mongo():
     database = client['crm_db']
     contacts_collection = database['contacts']
     return contacts_collection
+
