@@ -2,6 +2,7 @@ version: "3.9"
 services:
   web:
     build: .
+    command: python3 app.py
     ports:
       - "5005:5005"
     environment:
@@ -9,6 +10,14 @@ services:
       DB_HOST: "postgres"
       MONGO_HOST: "mongodb"
     hostname: "web"
+
+  celery_worker:
+    build: .
+    command: celery -A celery_worker worker --loglevel=INFO --purge --pool=solo
+    environment:
+      RABBIT_HOST: "rabbit_host"
+      DB_HOST: "postgres"
+    hostname: "celery_worker"
 
   postgres:
     image: "postgres"
@@ -22,7 +31,7 @@ services:
     restart: always
     hostname: mongodb
     ports:
-      - 27017:27017
+      - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
@@ -32,8 +41,15 @@ services:
     image: mongo-express
     restart: always
     ports:
-      - 8081:8081
+      - "8081:8081"
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
       ME_CONFIG_MONGODB_URL: mongodb://root:example@mongodb:27017/
+
+  rabbitmq:
+    image: "rabbitmq:3-management-alpine"
+    ports:
+        - "5672:5672"
+        - "15672:15672"
+    hostname: "rabbit_host"
