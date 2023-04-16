@@ -35,6 +35,29 @@ class EmailCredentials(Base):
     imap_server = Column(String(50), nullable=True)
     imap_port = Column(Integer, nullable=True)
 
+    def to_dict(self):
+        return {
+            'user_id': self.user_id,
+            'email': self.email,
+            'login': self.login,
+            'password': self.password,
+            'pop_server': self.pop_server,
+            'pop_port': self.pop_port,
+            'smtp_server': self.smtp_server,
+            'smtp_port': self.smtp_port,
+            'imap_server': self.imap_server,
+            'imap_port': self.imap_port
+        }
+
+    def get_mandatory_fields(self):
+        return {
+            'email': self.email,
+            'login': self.login,
+            'password': self.password,
+            'smtp_server': self.smtp_server,
+            'smtp_port': self.smtp_port
+        }
+
     def __init__(self, user_id, email, login, password, pop_server, smtp_server):
         self.user_id = user_id
         self.email = email
@@ -128,4 +151,3 @@ class Documents(Base):
 
     def __repr__(self):
         return f"<Documents {self.name}>"
-
