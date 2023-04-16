@@ -6,7 +6,7 @@ from bson.objectid import ObjectId
 import db_alchemy
 import email_lib
 import db_mongo
-
+from celery_worker import send_mail
 
 app = Flask(__name__)
 
@@ -139,7 +139,8 @@ def user_mail():
 
         recipient = request.form.get('recipient')
         email_message = request.form.get('email_message')
-        email_obj.send_email(recipient, email_message)
+#       email_obj.send_email(recipient, email_message)
+        send_mail.apply_async(args=[user_email_settings.id, recipient, email_message])
         return "SEND MAIL"
     emails = email_obj.get_emails([1, 2, 3], protocol='pop3')
     return render_template('send_email.html', emails=emails)
